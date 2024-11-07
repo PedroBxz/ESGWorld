@@ -5,58 +5,50 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.foundation.layout.*
+
 import androidx.compose.material3.CardElevation
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.contentColorFor
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import br.com.fiap.esgworld.ui.theme.ESGWorldTheme
-import br.com.fiap.esgworld.ui.theme.roboto
+import androidx.compose.material3.Card
+import androidx.compose.ui.unit.dp
+import androidx.compose.material3.CardDefaults
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.layout.VerticalAlignmentLine
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ESGWorldTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    PagLogin()
+                    MainScreen()
                 }
             }
         }
@@ -64,543 +56,355 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun PagLogin() {
+fun MainScreen() {
 
-    var usuario = remember {
-        mutableStateOf("")
-    }
-    var senha = remember {
-        mutableStateOf("")}
-    Column(
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .background(Color(0xfff3498DB))
-            .fillMaxSize()
-            .height(500.dp)
-    ) {
-        Card(
+    Box(modifier = Modifier.fillMaxSize()) {
+
+        // A imagem vai ficar no fundo
+        Image(
+            painter = painterResource(id = R.drawable.inicial), // Substitua com o nome da sua imagem
+            contentDescription = null, // Descrição opcional
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            elevation = CardDefaults.cardElevation(40.dp)
-
+                .fillMaxSize()
+                .zIndex(0f), // Coloca a imagem atrás
+            contentScale = ContentScale.Crop
+        )
+        TopBar()
+        // Conteúdo da tela que ficará sobre a imagem
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .zIndex(1f) // Garante que o conteúdo ficará sobre a imagem
+            .padding(16.dp)
         ) {
-
-            Column {
-                Image(
-                    painter = painterResource(id = R.drawable.logo),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .padding(horizontal = 30.dp)
-                        .fillMaxWidth()
-                        .height(150.dp)
-                )
-                Text(
-                    text = "FAZER LOGIN",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(5.dp),
-                    fontSize = 25.sp,
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = roboto
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                Text(
-                    text = "Usuário",
-                    modifier = Modifier.padding(horizontal = 10.dp),
-                    fontWeight = FontWeight.Black,
-                    fontFamily = roboto
-                )
-                OutlinedTextField(
-                    value = usuario.value,
-                    onValueChange = {
-                                    usuario.value = it
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    shape = RoundedCornerShape(10.dp)
-                )
-                Spacer(modifier = Modifier.height(15.dp))
-                Text(
-                    text = "Senha",
-                    modifier = Modifier.padding(horizontal = 10.dp),
-                    fontWeight = FontWeight.Black,
-                    fontFamily = roboto
-                )
-                OutlinedTextField(
-                    value = senha.value,
-                    onValueChange = {
-                                    senha.value = it
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    shape = RoundedCornerShape(10.dp),
-                    visualTransformation = PasswordVisualTransformation()
-                )
-                Button(
-                    onClick = { /*TODO*/ },
-                    modifier = Modifier
-                        .width(200.dp)
-                        .align(Alignment.CenterHorizontally),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xfff3498DB))
-                ) {
-                    Text(text = "Entrar",
-                        fontFamily = roboto)
-
-                }
-            }
+            Spacer(modifier = Modifier.height(50.dp))
+            ContentSection() // Esta é a tela principal
+            Spacer(modifier = Modifier.weight(1f)) // Para empurrar o conteúdo e fixar a NavigationBar no final
         }
+
+        // BottomNavigation ficará fixo no final da tela
+        BottomNavigation(modifier = Modifier
+            .align(Alignment.BottomCenter)
+            .zIndex(1f))
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopBar() {
+    TopAppBar(
+        title = { Text("ESG.web") },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color(0xFF376A55),
+            titleContentColor = Color.White
+        )
+    )
+}
+
+@Composable
+fun ContentSection() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()  // Faz a coluna preencher toda a tela
+            .padding(16.dp)
+        ,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center // Centraliza verticalmente
+    ) {
+        Text(
+            text = "Bem-vindo(a) a plataforma que vai mudar o futuro!",
+            style = MaterialTheme.typography.titleLarge,
+            textAlign = TextAlign.Center
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(text = "Crie e gerencie todas as suas iniciativas ESG.")
+
+        Button(
+            onClick = { /* Handle button click */ },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF376A55),
+                contentColor = Color.White
+            ),
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Text("Comece agora!")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+
+        }
+    }
+
+
+
+@Composable
+fun BottomNavigation(modifier: Modifier = Modifier) {
+    NavigationBar(
+        containerColor = Color(0xFF376A55),
+        modifier = modifier
+    ) {
+        NavigationBarItem(
+            selected = false,
+            onClick = { /* Handle navigation to main page */ },
+            icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
+            label = { Text("Home") },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = Color.White,
+                selectedTextColor = Color.White,
+                unselectedIconColor = Color.White.copy(alpha = 0.7f),
+                unselectedTextColor = Color.White.copy(alpha = 0.7f)
+            )
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = { /* Handle navigation to initiatives */ },
+            icon = { Icon(Icons.Default.List, contentDescription = "Iniciativas") },
+            label = { Text("Iniciativas") },
+                    colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color.White,
+            selectedTextColor = Color.White,
+            unselectedIconColor = Color.White.copy(alpha = 0.7f),
+            unselectedTextColor = Color.White.copy(alpha = 0.7f)
+        )
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = { /* Handle navigation to login */ },
+            icon = { Icon(Icons.Default.AccountCircle, contentDescription = "Login") },
+            label = { Text("Login") },
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = Color.White,
+                selectedTextColor = Color.White,
+                unselectedIconColor = Color.White.copy(alpha = 0.7f),
+                unselectedTextColor = Color.White.copy(alpha = 0.7f)
+            )
+        )
     }
 }
 
 @Composable
-fun PagPrincipal() {
+fun InitiativesPage() {
+    TopBar()
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
 
-    Box() {
-        Column {
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            Spacer(modifier = Modifier.height(55.dp))
 
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color(0xfff3498DB))
-                    .height(60.dp)
-            ) {
-                Text(
-                    text = "ESG World",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    textAlign = TextAlign.Center,
-                    fontSize = 25.sp,
-                    fontFamily = roboto
-
-                )
-            }
-            Column {
-                Text(
-                    text = "Progresso Usuário",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(15.dp),
-                    fontSize = 30.sp,
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = roboto
-                )
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(150.dp)
-                        .padding(horizontal = 5.dp)
-                        .align(Alignment.CenterHorizontally),
-                    elevation = CardDefaults.cardElevation(10.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Card(
-                            modifier = Modifier
-                                .width(120.dp)
-                                .height(150.dp)
-                                .padding(vertical = 10.dp, horizontal = 5.dp),
-                            elevation = CardDefaults.cardElevation(5.dp)
-
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.grafico),
-                                contentDescription = ""
-                            )
-                            Text(
-                                text = "Environmental",
-                                modifier = Modifier.fillMaxWidth(),
-                                textAlign = TextAlign.Center,
-                                fontFamily = roboto,
-                                fontSize = 13.sp
-                            )
-                        }
-                        Card(
-                            modifier = Modifier
-                                .width(120.dp)
-                                .height(150.dp)
-                                .padding(vertical = 10.dp, horizontal = 5.dp),
-                            elevation = CardDefaults.cardElevation(5.dp)
-
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.grafico),
-                                contentDescription = ""
-                            )
-                            Text(
-                                text = "Social",
-                                modifier = Modifier.fillMaxWidth(),
-                                textAlign = TextAlign.Center,
-                                fontFamily = roboto
-                            )
-                        }
-                        Card(
-                            modifier = Modifier
-                                .width(120.dp)
-                                .height(150.dp)
-                                .padding(vertical = 10.dp, horizontal = 5.dp),
-                            elevation = CardDefaults.cardElevation(5.dp)
-
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.grafico),
-                                contentDescription = ""
-                            )
-                            Text(
-                                text = "Governance",
-                                modifier = Modifier.fillMaxWidth(),
-                                textAlign = TextAlign.Center,
-                                fontFamily = roboto
-                            )
-                        }
-                    }
-                }
-            }
             Text(
-                text = "Frequencia semana",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(15.dp),
-                fontSize = 30.sp,
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold,
-                fontFamily = roboto
+                text = "Iniciativas ESG",
+                style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
+                modifier = Modifier.padding(bottom = 8.dp)
             )
-            Card(modifier = Modifier.padding(horizontal = 10.dp)) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)
-                        .padding(vertical = 10.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
 
-                    Column(
-                        modifier = Modifier
-                            .height(140.dp)
-
-
-                    ) {
-                        Text(
-                            text = "SEG",
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.width(50.dp)
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.concluido),
-                            contentDescription = "",
-                            modifier = Modifier.width(50.dp)
-                        )
-                    }
-                    Column(
-                        modifier = Modifier
-                            .height(140.dp)
-
-
-                    ) {
-                        Text(
-                            text = "TER", textAlign = TextAlign.Center,
-                            modifier = Modifier.width(50.dp)
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.concluido),
-                            contentDescription = "",
-                            modifier = Modifier.width(50.dp)
-                        )
-                    }
-                    Column(
-                        modifier = Modifier
-                            .height(140.dp)
-
-
-                    ) {
-                        Text(
-                            text = "QUA", textAlign = TextAlign.Center,
-                            modifier = Modifier.width(50.dp)
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.concluido),
-                            contentDescription = "",
-                            modifier = Modifier.width(50.dp)
-                        )
-                    }
-                    Column(
-                        modifier = Modifier
-                            .height(140.dp)
-
-
-                    ) {
-                        Text(
-                            text = "QUI", textAlign = TextAlign.Center,
-                            modifier = Modifier.width(50.dp)
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.concluido),
-                            contentDescription = "",
-                            modifier = Modifier.width(50.dp)
-                        )
-                    }
-                    Column(
-                        modifier = Modifier
-                            .height(140.dp)
-
-
-                    ) {
-                        Text(
-                            text = "SEX", textAlign = TextAlign.Center,
-                            modifier = Modifier.width(50.dp)
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.concluido),
-                            contentDescription = "",
-                            modifier = Modifier.width(50.dp)
-                        )
-                    }
-                    Column(
-                        modifier = Modifier
-                            .height(140.dp)
-
-
-                    ) {
-                        Text(
-                            text = "SAB", textAlign = TextAlign.Center,
-                            modifier = Modifier.width(50.dp)
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.concluido),
-                            contentDescription = "",
-                            modifier = Modifier.width(50.dp)
-                        )
-                    }
-                    Column(
-                        modifier = Modifier
-                            .height(140.dp)
-
-
-                    ) {
-                        Text(
-                            text = "DOM", textAlign = TextAlign.Center,
-                            modifier = Modifier.width(50.dp)
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.concluido),
-                            contentDescription = "",
-                            modifier = Modifier.width(50.dp)
-                        )
-                    }
-
+            LazyColumn {
+                items(5) { index ->
+                    TaskItem(
+                        title = "Iniciativa ESG ${index + 1}",
+                        date = "07/11/2024",
+                        status = "Em andamento"
+                    )
 
                 }
+
+
             }
             Button(
-                onClick = { /*TODO*/ },
-                Modifier
-                    .fillMaxWidth()
-                    .padding(15.dp),
-                colors = ButtonDefaults.buttonColors(Color(0xfff3498DB))
-            ) {
-                Text(text = "Conferir Desafios e Recompensas",
-                    fontFamily = roboto)
-            }
-            Image(
-                painter = painterResource(id = R.drawable.logo),
-                contentDescription = "",
+                onClick = { /* Handle add new initiative */ },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF376A55),
+                    contentColor = Color.White
+                ),
                 modifier = Modifier
-                    .padding(horizontal = 30.dp)
                     .fillMaxWidth()
-            )
-        }
+                    .padding(horizontal = 16.dp)
+            ) {
+                Text("Adicionar nova iniciativa")
+            }
 
+        }
+        BottomNavigation(modifier = Modifier.align(Alignment.BottomCenter))
     }
 }
 
 @Composable
-fun PagRecompensasDesafios() {
-    Column {
-        Row(
+fun TaskItem(title: String, date: String, status: String) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 12.dp),
+    ) {
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xfff3498DB))
-                .height(60.dp)
+                .padding(16.dp)
         ) {
             Text(
-                text = "ESG World",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                textAlign = TextAlign.Center,
-                fontSize = 25.sp,
-                fontFamily = roboto
-
+                text = title,
+                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold),
+            )
+            Text(
+                text = "Data de Atualização: $date",
+                style = TextStyle(fontSize = 12.sp),
+            )
+            Text(
+                text = "Status: $status",
+                style = TextStyle(fontSize = 14.sp, color = Color.Green),
             )
         }
-        Text(
-            text = "Desafios", modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp),
-            textAlign = TextAlign.Center,
-            fontSize = 30.sp,
-            fontFamily = roboto
 
-        )
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp)
-                .padding(5.dp)
-        ) {
-
-            Text(
-                text = "Desafio de redução de resíduos",
-                fontWeight = FontWeight.ExtraBold,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                fontFamily = roboto
-            )
-            Text(
-                text = "Reduzir a quantidade de resíduos gerados no escritório, adotando práticas de redução e reutilização.",
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                fontFamily = roboto
-            )
-            Row ( modifier = Modifier
-                .fillMaxSize(),
-                horizontalArrangement = Arrangement.SpaceBetween){
-                Text(text = "10 pontos", textAlign = TextAlign.Center, modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(vertical = 10.dp),
-                    fontFamily = roboto)
-                Button(onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(Color(0xfff3498DB))) {
-                  Text(text = "Concluir")
-                }
-            }
-        }
-
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp)
-                .padding(5.dp)
-        ) {
-            Text(
-                text = "Desafio de Voluntariado Social",
-                fontWeight = FontWeight.ExtraBold,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                fontFamily = roboto
-            )
-            Text(
-                text = "Os colaboradores são desafiados a se envolverem em atividades voluntárias que beneficiem a comunidade local",
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                fontFamily = roboto
-            )
-            Row ( modifier = Modifier
-                .fillMaxSize(),
-                horizontalArrangement = Arrangement.SpaceBetween){
-                Text(text = "10 pontos", textAlign = TextAlign.Center, modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(vertical = 10.dp),
-                    fontFamily = roboto)
-                Button(onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(Color(0xfff3498DB))) {
-                    Text(text = "Concluir")
-                }
-            }
-
-        }
-        Text(
-            text = "Recompensas", modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp),
-            textAlign = TextAlign.Center,
-            fontSize = 30.sp,
-            fontFamily = roboto
-        )
-
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp)
-                .padding(5.dp)
-        ) {
-            Text(
-                text = "Folga Remunerada", fontWeight = FontWeight.ExtraBold,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                fontFamily = roboto
-            )
-            Text(
-                text = "Uma recompensa em que o colaborador ganha folgas remuneradas por seu compromisso com os desafios ESG.",
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                fontFamily = roboto
-            )
-            Row ( modifier = Modifier
-                .fillMaxSize(),
-                horizontalArrangement = Arrangement.SpaceBetween){
-                Text(text = "100 pontos", textAlign = TextAlign.Center, modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(vertical = 10.dp),
-                    fontFamily = roboto)
-                Button(onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(Color(0xfff3498DB))) {
-                    Text(text = "Resgatar")
-                }
-            }
-
-        }
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp)
-                .padding(5.dp)
-        ) {
-            Text(text = "Assinatura de Serviços de Streaming", fontWeight = FontWeight.ExtraBold,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                fontFamily = roboto)
-            Text(text = "Uma assinatura de um serviço de streaming popular de filmes, séries, e programas de TV",modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                fontFamily = roboto)
-            Row ( modifier = Modifier
-                .fillMaxSize(),
-                horizontalArrangement = Arrangement.SpaceBetween){
-                Text(text = "60 pontos", textAlign = TextAlign.Center, modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(vertical = 10.dp),
-                    fontFamily = roboto)
-                Button(onClick = { /*TODO*/ },
-                    colors = ButtonDefaults.buttonColors(Color(0xfff3498DB))) {
-                    Text(text = "Resgatar")
-                }
-            }
-
-        }
-
+    }
 
     }
 
 
+@Composable
+fun LoginPage() {
+    TopBar()
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = "Login",
+                style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+
+            BasicTextField(
+                value = "",
+                onValueChange = { /* Handle user input */ },
+                textStyle = TextStyle(fontSize = 16.sp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+                    .background(Color.Gray.copy(alpha = 0.1f), shape = MaterialTheme.shapes.small)
+                    .padding(12.dp)
+            )
+
+            BasicTextField(
+                value = "",
+                onValueChange = { /* Handle password input */ },
+                textStyle = TextStyle(fontSize = 16.sp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+                    .background(Color.Gray.copy(alpha = 0.1f), shape = MaterialTheme.shapes.small)
+                    .padding(12.dp)
+            )
+
+            Button(
+                onClick = { /* Handle login */ },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF376A55),
+                    contentColor = Color.White
+                )
+            ) {
+                Text("Entrar")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            TextButton(
+                onClick = { /* Handle navigate to registration page */ },
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                Text(
+                    text = "Não tem uma conta? Registre-se",
+                    color = Color(0xFF376A55),
+                    style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                )
+            }
+        }
+        BottomNavigation(modifier = Modifier.align(Alignment.BottomCenter))
+    }
+}
+
+@Composable
+fun AddNewInitiativePage(
+
+) {
+    var title by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+
+            Text(
+                text = "Adicionar Nova Iniciativa",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+
+            // Campo de entrada para o título
+            OutlinedTextField(
+                value = title,
+                onValueChange = { title = it },
+                label = { Text("Título") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+            )
+
+            // Campo de entrada para a descrição
+            OutlinedTextField(
+                value = description,
+                onValueChange = { description = it },
+                label = { Text("Descrição") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
+                maxLines = 5
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Botão para salvar
+            Button(
+                onClick = { null },
+                enabled = title.isNotBlank() && description.isNotBlank(), // Habilita o botão apenas se os campos não estiverem vazios
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF376A55),
+                    contentColor = Color.White
+                )
+            ) {
+                Text("Salvar Iniciativa")
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Botão para cancelar
+            OutlinedButton(
+                onClick = { null },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Cancelar")
+            }
+        }
+        BottomNavigation(modifier = Modifier.align(Alignment.BottomEnd))
+    }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun PagLoginPreview() {
+fun PreviewApp() {
     ESGWorldTheme {
-        PagPrincipal()
-
+        AddNewInitiativePage() // Altere conforme a página que deseja pré-visualizar
     }
 }
-
